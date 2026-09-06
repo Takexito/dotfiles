@@ -20,6 +20,17 @@
 [merge]
 	conflictStyle = zdiff3
 
+# gh как источник учётных данных для GitHub. Прописано здесь, а не через
+# `gh auth setup-git`: тот пишет в ~/.gitconfig, который в контейнере пропадает
+# при пересоздании, и работает только если gh уже авторизован.
+# Пустой helper сбрасывает унаследованные — иначе сработает первый попавшийся.
+[credential "https://github.com"]
+	helper =
+	helper = !gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !gh auth git-credential
+
 [alias]
 	s = status --short --branch
 	lg = log --oneline --graph --decorate -20

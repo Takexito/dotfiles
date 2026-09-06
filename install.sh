@@ -47,19 +47,21 @@ link_tmux() {
     fi
 }
 
-setup_gh_credentials() {
-    # Без этого git не умеет ходить в приватные репозитории: gh становится
-    # credential helper. Авторизация (gh auth login) — отдельный разовый шаг.
+report_gh() {
+    # Сам credential helper прописан в git/config и работает всегда.
+    # Здесь только напоминание: без авторизации приватные репозитории недоступны.
     command -v gh >/dev/null 2>&1 || return 0
-    if ! git config --global --get-regexp 'credential\..*github\.com\.helper' >/dev/null 2>&1; then
-        gh auth setup-git 2>/dev/null && echo ">> gh подключён как credential helper для git"
+    if gh auth status >/dev/null 2>&1; then
+        echo ">> gh авторизован"
+    else
+        echo ">> gh не авторизован — приватные репозитории недоступны, выполни: gh auth login"
     fi
 }
 
 link_git_config
 link_shell
 link_tmux
-setup_gh_credentials
+report_gh
 
 if command -v gitleaks >/dev/null 2>&1; then
     echo ">> gitleaks: $(gitleaks version 2>&1 | head -1)"
