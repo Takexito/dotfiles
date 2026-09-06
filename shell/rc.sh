@@ -28,6 +28,14 @@ if [[ $- == *i* ]]; then
     bind '"\e[B": history-search-forward' 2>/dev/null || true
 fi
 
+# Подключиться к сессии tmux этого проекта или создать её. Смысл в том, что
+# агент внутри переживает обрыв SSH: вернулся — `dev` — и весь вывод на месте.
+dev() {
+    local name="${1:-${PROJECT_NAME:-dev}}"
+    command -v tmux >/dev/null 2>&1 || { echo "tmux не установлен" >&2; return 1; }
+    tmux new-session -A -s "$name"
+}
+
 export HISTSIZE=50000
 export HISTFILESIZE=50000
 export HISTCONTROL=ignoreboth:erasedups

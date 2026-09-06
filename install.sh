@@ -34,8 +34,32 @@ link_shell() {
     fi
 }
 
+link_tmux() {
+    local rc="$HOME/.tmux.conf" marker="# >>> dotfiles >>>"
+    [ -f "$rc" ] || touch "$rc"
+    if ! grep -qF "$marker" "$rc"; then
+        {
+            echo "$marker"
+            echo "source-file $DOTFILES/tmux/tmux.conf"
+            echo "# <<< dotfiles <<<"
+        } >> "$rc"
+        echo ">> подключён $DOTFILES/tmux/tmux.conf"
+    fi
+}
+
+setup_gh_credentials() {
+    # Без этого git не умеет ходить в приватные репозитории: gh становится
+    # credential helper. Авторизация (gh auth login) — отдельный разовый шаг.
+    command -v gh >/dev/null 2>&1 || return 0
+    if ! git config --global --get-regexp 'credential\..*github\.com\.helper' >/dev/null 2>&1; then
+        gh auth setup-git 2>/dev/null && echo ">> gh подключён как credential helper для git"
+    fi
+}
+
 link_git_config
 link_shell
+link_tmux
+setup_gh_credentials
 
 if command -v gitleaks >/dev/null 2>&1; then
     echo ">> gitleaks: $(gitleaks version 2>&1 | head -1)"
