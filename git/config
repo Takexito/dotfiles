@@ -1,0 +1,28 @@
+# Подключается через include из ~/.gitconfig — см. install.sh.
+# Здесь только то, что осмысленно и на хосте, и в контейнере.
+[user]
+	name = takexito
+	email = takexito@xaenox.dev
+
+[init]
+	defaultBranch = main
+[pull]
+	rebase = true
+[push]
+	autoSetupRemote = true
+[fetch]
+	prune = true
+[rerere]
+	enabled = true
+[diff]
+	algorithm = histogram
+	colorMoved = zebra
+[merge]
+	conflictStyle = zdiff3
+
+[alias]
+	s = status --short --branch
+	lg = log --oneline --graph --decorate -20
+	last = log -1 --stat
+	unstage = restore --staged
+	amend = commit --amend --no-edit

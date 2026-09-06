@@ -1,0 +1,12 @@
+# Глобальный gitignore: мусор, который не должен попадать ни в один проект.
+.DS_Store
+*.swp
+*~
+.venv/
+__pycache__/
+target/
+.gradle/
+build/
+node_modules/
+.idea/
+.direnv/
